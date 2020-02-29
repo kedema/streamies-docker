@@ -7,6 +7,7 @@ Easily launch a [Streamies](https://streamies.io) crypto wallet using Docker
 **Prerequisite:**
 - Platform: x86_64
 - Your User/Group ID is 1000
+- The directory ~/.streamies exist and chown by user (user with ID 1000:1000)
 
 If you **not have** theses prerequisites go to further step. If you match just do a:
 
@@ -71,6 +72,8 @@ Successfully tagged streamies-docker:latest
 ```
 
 ### Step 4: Run container
+
+**Ensure directory "~/.streamies" exist and is owned by you** (your user), if not create it (mkdir ~/.streamies). 
 
 **Option 1: cmd-line**
 ```

@@ -1,0 +1,9 @@
+version: '3'
+services:
+ strms:
+  image: "streamies-docker:2-2-0"
+  container_name: "strms-220"
+  volumes:
+   - "/path/to/.streamies:/home/strmsu/.streamies"
+  ports:
+   - "55297:55297"

@@ -11,7 +11,7 @@ ENV DEBIAN_FRONTEND noninteractive
 
 # Update apt lists and download basics tools
 RUN apt-get update &&\
-	apt-get -y install wget unzip nano &&\
+	apt-get -y install wget unzip &&\
 # Download Streamies wallet
 	wget --quiet $STRMS_URL -O /tmp/wallet.zip &&\
 	unzip /tmp/wallet.zip -d /usr/local/bin &&\
@@ -21,7 +21,7 @@ RUN apt-get update &&\
 RUN groupadd -r -g $GROUP_ID strms && useradd -r -u $USER_ID -g strms -m -d /home/strmsu strmsu -s /bin/bash &&\
 	chown strmsu:strms /usr/local/bin/streamies* &&\
 # Clean Up
-        apt-get -y remove --purge wget unzip nano && apt-get -y clean && apt-get -y autoremove &&\ 
+        apt-get -y remove --purge wget unzip && apt-get -y clean && apt-get -y autoremove &&\ 
 	rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # Switch to user

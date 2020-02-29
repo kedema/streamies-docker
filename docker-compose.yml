@@ -1,8 +1,8 @@
 version: '3'
 services:
  strms:
-  image: "streamies-docker:2-2-0"
-  container_name: "strms-220"
+  image: "streamies-docker"
+  container_name: "streamies-docker"
   volumes:
    - "~/.streamies:/home/strmsu/.streamies"
   ports:

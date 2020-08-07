@@ -101,3 +101,4 @@ Si vous comptez l'utiliser ailleurs vous pouvez compresser les fichiers et les d
 ```
 tar -czvf streamies-2.4.3.tar.gz src/streamies-cli src/streamies-tx src/streamiesd
 ```
+**NOTE:** Pour une utilisation en mode portable, le wallet demande a acceder a la "libboost" qui n'etait pas sur le serveur sur lequel j'ai telecharger mes fichiers. J'ai pu résoudre le problème avec un "sudo apt-get install libboost-all-dev" mais cela nécéssite de telecharger beaucoup de données, j'imagine qu'il y as une meilleure solution mais je ne la connais pas pour le moment.

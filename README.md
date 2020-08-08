@@ -4,6 +4,8 @@ Easily launch a [Streamies](https://streamies.io) crypto wallet using Docker
 
 ## Quickstart from Docker Hub
 
+**WARNING**: This docker image is updated but consider to compile your own wallet since some users have reported trojan with wallet fetched from github
+
 **Prerequisite:**
 - Platform: x86_64
 - Your User/Group ID is 1000
@@ -16,6 +18,8 @@ docker run --restart=always -d -v ~/.streamies:/home/strmsu/.streamies --name=st
 ```
 
 ## Build your own image
+
+**WARNING**: This docker image is updated but consider to compile your own wallet since some users have reported trojan with wallet fetched from github
 
 **Prerequisite:**
 - Have the link of streamies wallet for your architecture (Visit [Streamies Github](https://github.com/Streamies/Streamies/releases))

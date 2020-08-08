@@ -4,10 +4,10 @@ LABEL maintainer="https://github.com/kedema"
 
 # Wallet link
 # Select good version for your arch, actually x86_64, and set user and group id
-ENV STRMS_URL=https://github.com/Streamies/Streamies/releases/download/v2.2/Streamies-2.2.0-x86_64-pc-linux-gnu.zip
 ENV USER_ID=1000
 ENV GROUP_ID=1000
 ENV DEBIAN_FRONTEND noninteractive
+ENV STRMS_URL=https://github.com/Streamies/Streamies/releases/download/v2.4.3/Streamies-v2.4.3-x86_64-pc-linux-gnu.zip
 
 # Update apt lists and download basics tools
 RUN apt-get update &&\

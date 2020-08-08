@@ -1,7 +1,7 @@
 # Compile Streamies Wallet
 Feuille de route pour compiler le wallet de la cryptomonnaie Streamies (STRMS).
 Certains utilisateurs rencontre des trojans lorsqu'ils utilisent la version précompiler du wallet sur Github. La version compilée soit-même ne semble pas être infecté, voilà la raison d'être de ce guide
-Je n'ai pas trouver d'instructions complètes pour compiler  le wallet alors j'ai creer les miennes. Ces instructions sont tirés de ce que j'ai pu trouver dans les sources (Streamies-x-x-x/depends/README.md), dans la documentation PIVX, et tiré des recherches que j'ai effectuer sur internet pour corriger certaines erreures qui se sont affichées.
+Je n'ai pas trouver d'instructions complètes pour compiler  le wallet alors j'ai creer les miennes. Ces instructions sont tirés de ce que j'ai pu trouver dans les sources (Streamies-x-x-x/depends/README.md), dans la documentation PIVX, et tiré des recherches que j'ai effectuées sur internet pour corriger certaines erreures qui se sont affichées.
 Pour l'instant n'as été tester que pour la plateforme linux x86_64. Compilé sur Ubuntu 20.04 par la platforme WSL2.
 
 ## Pré-requis
@@ -18,12 +18,12 @@ Vous pouvez verifier que tout c'est bien passé en retapant la commande swapon -
 Si vous avez suffisament de memoire (3G ou +), et/ou que votre fichier de swap et prêt alors vous pouvez passer à la suite.
 
 ## Dépendances
-Il faut télécharger tous les outils nécéssaires à la compilation du wallet en ligne de commande. Pour generer le wallet QT il faudra surement plus de dépendances à installer, j'y reviendrai peut-être si quelqu'un le demande..
-
+Il faut télécharger tous les outils nécéssaires à la compilation du wallet.
 ```
 sudo apt-get update
 sudo apt-get install make automake cmake curl g++-multilib libtool binutils-gold bsdmainutils pkg-config python3 patch libssl-dev libgmp-dev
 ```
+Il y a d'autres dépendances, mais nous allons les compiler plus tard.
 
 ## Compilation
 ### Etape 1: Récuperation des sources:
@@ -34,7 +34,6 @@ wget https://github.com/Streamies/Streamies/archive/v2.4.3.tar.gz
 tar -xzvf v2.4.3.tar.gz
 ```
 
-### Etape 2: Configuration
 Une fois les fichiers décompressés, aller dans la racine du nouveau répertoire créé par la décompression du fichier tar.gz, et nous allons rendre executables différents scripts contenus dans ce dossier pour que les opérations de compilations se déroulent sans erreurs:
 
 ```
@@ -44,7 +43,7 @@ cd Streamies-2.4.3/
 chmod +x autogen.sh contrib/install_db4.sh share/genbuild.sh
 ```
 
-### Etape 3: Génération des dépendances, fichiers configure et makefile
+### Etape 2: Génération des dépendances, fichiers configure et makefile
 Nous allons en premier generer les dépendance afin de les inclures dans le binaire final.
 Pour cela il faut ce rendre dans le dossier "depends" et faire un make, le script va se charger de telecharger et compiler les dépendances nécéssaires.
 ```
@@ -52,7 +51,7 @@ cd depends/
 make
 #Ce processus est assez long! Vous pouvez l'accelerer en ajoutant -jX à make, où X est le nombre de vos coeurs réels, exemple "make -j4" pour un processeur 4 coeurs
 ```
-***Windows WSL2 Note:*** Si une erreur du style "/bin/bash: 1 Syntax error:"(" unexpected" c'est surement que vous êtes sous WSL, le probleme vient du fait que windows ajoute des chemins "windows" dans votre $PATH, ceux-ci contiennent des espaces et semblent être a l'origine de ce bug. J'ai pu resoudre mon probleme en tapant "echo $PATH", j'ai modifier la sortie pour enlever les path avec espaces (exemple: C:/Program Files/...) puis j'ai exporter mes path corrigés avec "export $PATH="<MesPathCorrigés>"". Cette modification n'est pas persistente, si vous faites un erreur qui provoque des bugs, fermer vos terminal WSL, rouvrez-les et remodifier les paths en faisant attention à la syntaxe.
+***Windows WSL2 Note:*** Si vous rencontrez une erreur du style "/bin/bash: 1 Syntax error:"(" unexpected", c'est sûrement que vous êtes sous WSL, le probleme vient du fait que windows ajoute des chemins "windows" dans votre $PATH, ceux-ci contiennent des espaces et semblent être a l'origine de ce bug. J'ai pu resoudre mon probleme en tapant "echo $PATH", j'ai modifier la sortie pour enlever les path avec espaces (exemple: C:/Program Files/...) puis j'ai exporter mes path corrigés avec "export $PATH="<MesPathCorrigés>"". Cette modification n'est pas persistente, si vous faites un erreur qui provoque des bugs, fermer vos terminal WSL, rouvrez-les et remodifier les paths en faisant attention à la syntaxe.
 
 On va maintenant utiliser les scripts inclus dans la source pour préparer l'installation, pour cela on revient dans le dossier racine et on lance autogen:
 ```
@@ -60,12 +59,12 @@ cd ..
 ./autogen.sh
 #Génere le fichier "configure" dont nous aurons besoin plus bas
 ```
-Le wallet utilise une ancienne version de la base de donnée BerkeleyDB (v4.8), celle-ci n'etant plus disponible dans les repo officiels, il faut la générer.Par chance un script est fourni avec les sources, nous allons le lancer:
+Le wallet utilise une ancienne version de la base de donnée BerkeleyDB (v4.8), celle-ci n'étant plus disponible dans les repo officiels, il faut la générer. Par chance un script est fourni avec les sources, nous allons l'éxecuter:
 ```
-# Verifiez avant de lancer que vous êtes toujours dans le dossier Streamies-x-x-x/
+# Vérifiez avant de lancer que vous êtes toujours dans le dossier Streamies-x-x-x/
 ./contrib/install_db4.sh `pwd`
 ```
-Apres quelques minutes/secondes en fonction la puissance de votre système, le script devrait se terminer en vous affichant quelque chose du genre :
+Après quelques minutes/secondes en fonction la puissance de votre système, le script devrait se terminer en vous affichant quelque chose du genre :
 ```
   export BDB_PREFIX='/<PWD>/Streamies-2.4.3/db4'
 # <PWD> representera votre chemin personalisé
@@ -73,9 +72,9 @@ Apres quelques minutes/secondes en fonction la puissance de votre système, le s
 # Il s'agit de la commande personalisé pour vous pour forcer la compilation avec la base de donnée que nous venons de générer.
 ```
 
-On configure le Makefile, avec configure, la ligne générée par le script pour la bdd et nous allons y ajouter la liaison vers les dépendances que nous avons génerer:
+On génère le Makefile, avec configure, la ligne générée par le script pour la bdd et nous allons y ajouter la liaison vers les dépendances que nous avons génerées, ainsi qu'un flag reduisant les sortis de débug pour réduire la taille des binaires:
 ```
-# Verifiez avant de lancer que vous êtes toujours dans le dossier Streamies-x-x-x/
+# Vérifiez avant de lancer que vous êtes toujours dans le dossier Streamies-x-x-x/
 # Premierement on exporte la variable BDB_PREFIX, pour cela on copie-colle simplement la ligne "export ..." générée précedemment et on valide par entrée
 export BDB_PREFIX=$PWD/db4
 # On ajoute notre repertoire de dépendances
@@ -87,21 +86,21 @@ export CONFIG_SITE=$PWD/depends/x86_64-linux-gnu/share/config.site
 # Je n'ai jamais essayé! 
 ```
 
-### Etape 4: Compilation !
-On y est presque! il ne reste plus que le wallet à compiler et par chance c'est l'ordinateur qui fait tout (ou presque) maintenant!
-Pour lancer la compilation il suffit de lancer la commande:
+### Etape 3: Compilation !
+On y est presque! il ne reste plus que le wallet à compiler!
+Pour lancer la compilation il suffit de lancer la commande make dans le dossier racine:
 ```
 make
 #Ce processus est assez long! Vous pouvez l'accelerer en ajoutant -jX à make, où X est le nombre de vos coeurs réels, exemple "make -j4" pour un processeur 4 coeurs
 ```
-En fonction de la puissance de votre ordinateur, cela peut prendre de quelques minutes à quelques heures. A la fin si tout c'est bien passer, vous devriez trouver dans le dossier src/ beaucoup de fichiers y compris ceux qui nous interessent a savoir:
+En fonction de la puissance de votre ordinateur, cela peut prendre de quelques minutes à quelques heures. A la fin si tout c'est bien passé, vous devriez trouver dans le dossier src/ beaucoup de fichiers y compris ceux qui nous interessent à savoir:
 - streamiesd
 - strealies-cli
 - streamies-tx
 
 Vous trouverez également streamies-qt dans le sous-dossier "src/qt/"
 
-Vous remarquerez sans doutes que les fichiers sont assez lourd, je pensais avoir fait une erreur au début, mais en réalité les fichiers sont compilés avec beaucoup d'infos de debug, qui ne sont pas utiles en utilisation générale. Nous pouvons nettoyer ces fichiers et ainsi gagner (beaucoup) d'espace disque, pour cela nous allons utiliser l'outil strip:
+Vous remarquerez sans doutes que les fichiers sont assez lourd, surtout si vous n'avez pas mis le flag CXXFLAGS="-O2" à configure, je pensais avoir fait une erreur au début, mais en réalité les fichiers sont compilés avec beaucoup d'infos de debug, qui ne sont pas utiles en utilisation générale. Nous pouvons nettoyer ces fichiers et ainsi les reduires en taille, pour cela nous allons utiliser l'outil strip:
 ```
 # Toujours dans le dossier Streamies-x-x-x
 strip -v src/streamies-cli src/streamies-tx src/streamiesd
